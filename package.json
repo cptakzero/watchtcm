@@ -1,0 +1,16 @@
+{
+  "name": "searchtcm-webapp",
+  "source": "index.html",
+  "scripts": {
+    "dev": "parcel",
+    "build": "parcel build",
+    "format": "elm-format src --yes"
+  },
+  "devDependencies": {
+    "@parcel/transformer-elm": "^2.12.0",
+    "@parcel/transformer-sass": "^2.12.0",
+    "elm": "^0.19.1-6",
+    "elm-format": "^0.8.7",
+    "parcel": "^2.12.0"
+  }
+}
