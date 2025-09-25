@@ -6,7 +6,7 @@ This is a web application that provides an alternative search engine for movies 
 
 ## How do I use it?
 
-Just [click here](http://cptakdev.github.io/watchtcm/) and give it a try!
+I used to host this on my GitHub Pages site, but I've since taken it down as part of a redesign. You can clone this repository and run `npm install && npm run dev` if you want to try it out.
 
 ## Why did you make this?
 
