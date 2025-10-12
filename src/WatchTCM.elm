@@ -197,7 +197,7 @@ view model =
         , Html.small []
             [ Html.text "Created by "
             , Html.a
-                [ Attributes.href "mailto:christopher@ptak.io" ]
+                [ Attributes.href "mailto:cptakzero@gmail.com" ]
                 [ Html.text "Christopher Ptak" ]
             , Html.text ". Email me for bug reports or feature requests."
             ]
