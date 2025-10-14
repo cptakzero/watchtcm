@@ -1,8 +1,8 @@
-# Alternative TCM Search Engine
+# Alternative TCM Frontend
 
 ## What is this?
 
-This is a web application that provides an alternative search engine for movies on TCM (Turner Classic Movies).
+This is a web application that provides an alternative, searchable frontend for movies on [TCM](https://www.tcm.com) (Turner Classic Movies).
 
 ## How do I use it?
 
