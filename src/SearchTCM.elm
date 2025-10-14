@@ -19,9 +19,7 @@ main =
 
 
 
-----
---- Model
---
+-- MODEL
 
 
 type alias Model =
@@ -60,9 +58,7 @@ init () =
 
 
 
-----
---- Message
---
+-- MESSAGE
 
 
 type Msg
@@ -169,17 +165,15 @@ matchesFilters filters movie =
 
 
 
-----
---- View
---
+-- VIEW
 
 
 view : Model -> Browser.Document Msg
 view model =
     { title = "Search TCM"
     , body =
-        [ Html.header []
-            [ Html.h1 [] [ Html.text "Search TCM" ]
+        [ Html.header headerStyle
+            [ Html.h1 h1Style [ Html.text "Search TCM" ]
             , Html.hr [] []
             , viewFilters model
             ]
@@ -191,9 +185,7 @@ view model =
                 Html.div [] [ Html.text ("Failed to load movies: " ++ explain error) ]
 
             Loaded _ ->
-                Html.div
-                    [ Attributes.id "movies" ]
-                    (List.map viewMovie model.moviesShown)
+                Html.div moviesStyle (List.map viewMovie model.moviesShown)
         , Html.small []
             [ Html.text "Created by "
             , Html.a
@@ -207,32 +199,36 @@ view model =
 
 viewFilters : Model -> Html Msg
 viewFilters model =
-    Html.form []
+    Html.form formStyle
         [ Html.label
-            [ Attributes.for "year-minimum" ]
+            (labelStyle ++ [ Attributes.for "year-minimum" ])
             [ Html.text "Released after" ]
         , Html.input
-            [ Attributes.id "year-minimum"
-            , Events.onInput (SetYearMinimum << String.toInt)
-            ]
+            (inputStyle
+                ++ [ Attributes.id "year-minimum"
+                   , Events.onInput (SetYearMinimum << String.toInt)
+                   ]
+            )
             []
         , Html.label
-            [ Attributes.for "year-maximum" ]
+            (labelStyle ++ [ Attributes.for "year-maximum" ])
             [ Html.text "Released before" ]
         , Html.input
-            [ Attributes.id "year-maximum"
-            , Events.onInput (SetYearMaximum << String.toInt)
-            ]
+            (inputStyle
+                ++ [ Attributes.id "year-maximum"
+                   , Events.onInput (SetYearMaximum << String.toInt)
+                   ]
+            )
             []
         , Html.label
-            [ Attributes.for "genres" ]
+            (labelStyle ++ [ Attributes.for "genres" ])
             [ Html.text "Filter by Genre" ]
         , Html.select
-            [ Events.on "change" (Decode.map AddGenre Events.targetValue) ]
+            (inputStyle ++ [ Events.on "change" (Decode.map AddGenre Events.targetValue) ])
             ([ Html.option [] [ Html.text "Choose a genre" ] ]
                 ++ (List.map viewGenreOption <| Set.toList model.genresAvailable)
             )
-        , Html.ul []
+        , Html.ul [ Attributes.style "list-style" "none" ]
             (List.map viewGenreSelected <| Set.toList model.genresSelected)
         ]
 
@@ -270,14 +266,13 @@ viewMovie movie =
         rating =
             movie.rating |> Maybe.map ((++) " | ") |> Maybe.withDefault ""
     in
-    Html.div
-        []
+    Html.div movieCardStyle
         [ Html.a
             [ Attributes.href link ]
-            [ Html.img [ Attributes.src movie.thumbnail ] [] ]
+            [ Html.img (movieThumbnailStyle ++ [ Attributes.src movie.thumbnail ]) [] ]
         , Html.div
-            []
-            [ Html.a [ Attributes.href link ] [ Html.text movie.title ]
+            movieDescriptionStyle
+            [ Html.a (movieTitleStyle ++ [ Attributes.href link ]) [ Html.text movie.title ]
             , Html.div [] [ Html.text (releaseYear ++ runtime ++ rating) ]
             , Html.div []
                 [ case movie.description of
@@ -292,9 +287,110 @@ viewMovie movie =
 
 
 
-----
---- Loadable support
---
+-- STYLES
+
+
+h1Style : List (Html.Attribute msg)
+h1Style =
+    [ Attributes.style "margin" "0" ]
+
+
+headerStyle : List (Html.Attribute msg)
+headerStyle =
+    List.map (\( name, value ) -> Attributes.style name value)
+        [ ( "padding-left", "20px" )
+        , ( "padding-right", "20px" )
+        , ( "padding-top", "10px" )
+        , ( "padding-bottom", "10px" )
+        , ( "margin-top", "10px" )
+        , ( "margin-bottom", "10px" )
+        , ( "position", "sticky" )
+        , ( "top", "0" )
+        , ( "border-radius", "10px" )
+        , ( "background-color", "rgba(18, 18, 18, 0.75)" )
+        , ( "backdrop-filter", "blur(5px)" )
+        ]
+
+
+formStyle : List (Html.Attribute msg)
+formStyle =
+    List.map (\( name, value ) -> Attributes.style name value)
+        [ ( "width", "50%" )
+        , ( "display", "grid" )
+        , ( "grid-template-columns", "[label] auto [input] auto" )
+        ]
+
+
+labelStyle : List (Html.Attribute msg)
+labelStyle =
+    List.map (\( name, value ) -> Attributes.style name value)
+        [ ( "grid-column", "label" )
+        , ( "align-self", "center" )
+        , ( "line-height", "2em" )
+        ]
+
+
+inputStyle : List (Html.Attribute msg)
+inputStyle =
+    List.map (\( name, value ) -> Attributes.style name value)
+        [ ( "grid-column", "input" )
+        , ( "align-self", "center" )
+        , ( "height", "1.6em" )
+        , ( "border", "none" )
+        , ( "border-radius", "8px" )
+        ]
+
+
+moviesStyle : List (Html.Attribute msg)
+moviesStyle =
+    List.map (\( name, value ) -> Attributes.style name value)
+        [ ( "display", "grid" )
+        , ( "grid-template-columns", "repeat(4, 1fr)" )
+        , ( "grid-gap", "19.37px" )
+        ]
+
+
+movieCardStyle : List (Html.Attribute msg)
+movieCardStyle =
+    List.map (\( name, value ) -> Attributes.style name value)
+        [ ( "width", "285.467px" )
+        , ( "min-height", "317px" )
+        , ( "border-radius", "10px" )
+        , ( "color", "#212121" )
+        , ( "background-color", "#f5f5f5" )
+        ]
+
+
+movieThumbnailStyle : List (Html.Attribute msg)
+movieThumbnailStyle =
+    List.map (\( name, value ) -> Attributes.style name value)
+        [ ( "width", "285.467px" )
+        , ( "height", "187px" )
+        , ( "border-radius", "10px 10px 0px 0px" )
+        ]
+
+
+movieDescriptionStyle : List (Html.Attribute msg)
+movieDescriptionStyle =
+    List.map (\( name, value ) -> Attributes.style name value)
+        [ ( "padding-left", "14px" )
+        , ( "padding-right", "14px" )
+        , ( "padding-top", "4px" )
+        , ( "padding-bottom", "14px" )
+        ]
+
+
+movieTitleStyle : List (Html.Attribute msg)
+movieTitleStyle =
+    List.map (\( name, value ) -> Attributes.style name value)
+        [ ( "color", "#212121" )
+        , ( "text-decoration", "none" )
+        , ( "font-weight", "bold" )
+        ]
+
+
+
+-- LOADING STATUS
 
 
 type Loadable a
@@ -323,9 +419,7 @@ explain error =
 
 
 
-----
---- API Interaction
---
+-- API
 
 
 getMovies : Cmd Msg
