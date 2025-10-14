@@ -1,4 +1,4 @@
-module WatchTCM exposing (main)
+module SearchTCM exposing (main)
 
 import Browser
 import Html exposing (Html)
